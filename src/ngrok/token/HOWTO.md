@@ -1,20 +1,33 @@
 # How to generate auth_token
 
-## generate RSA key
-generate private key
-```openssl genrsa -out private.pem 256```
+## Generate RSA key
+Generate private key
+```
+openssl genrsa -out private.pem 256
+```
 
-generate public key
-```openssl rsa -in private.pem -pubout -out public.pem```
+Generate public key
+```
+openssl rsa -in private.pem -pubout -out public.pem
+```
 
-## update server key
-edit rsa.go, update the private key and pubic key,
+## Update server key
+Edit rsa.go, update the private key and pubic key,
 then rebuild server
 
-## update generator
-edit gentoken.go, update the private key and pubic key
+## Update generator
+Edit gentoken.go, update the private key and pubic key
 
-## generate auth_token
-run
-```go run gentoken.go -u new_user_name```
+## Generate auth_token
+Run
+```
+go run gentoken.go -u new_user_name
+```
+
+## Update client config
+Edit config
+
+```
+auth_token: xxxxxx
+```
 then, you can use the new token and new server!
