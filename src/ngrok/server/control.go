@@ -62,24 +62,20 @@ type Control struct {
 	shutdown *util.Shutdown
 }
 
-func checkToken(auth string) (bool, error) {
-        l := strings.IndexAny(auth, "=")
-        if l == -1 {
+func checkToken(auth string) bool {
+        sharp := strings.IndexAny(auth, "#")
+        if sharp == -1 {
                 return false, nil
         }
-        user := auth[l+1:]
-        enc := auth[:l+1]
+        user := auth[:sharp]
+        signature := auth[sharp+1:]
 
-        encdata, _ := base64.StdEncoding.DecodeString(enc)
-        dendata, err := token.RsaDecrypt(encdata)
+        encdata, _ := base64.StdEncoding.DecodeString(signature)
+        err := token.RsaVerify([]byte(user), encdata, crypto,MD5)
         if err != nil {
-                return false, err
+                return false
         }
-        if string(dendata) == user {
-                return true, nil
-        } else {
-                return false, nil
-        }
+	return true
 }
 
 func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
@@ -105,7 +101,7 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 	}
 
 	token := authMsg.User
-	if check, _ := checkToken(token); !check{
+	if checkToken(token){
 		failAuth(fmt.Errorf("Error auth_token: %s", token))
 		return
 	}
