@@ -1,10 +1,12 @@
 package server
 
 import (
+	"encoding/base64"
 	"fmt"
 	"io"
 	"ngrok/conn"
 	"ngrok/msg"
+	"ngrok/token"
 	"ngrok/util"
 	"ngrok/version"
 	"runtime/debug"
@@ -60,6 +62,27 @@ type Control struct {
 	shutdown *util.Shutdown
 }
 
+func checkToken(auth string) (bool, error) {
+        l := strings.IndexAny(auth, "=")
+        if l == -1 {
+                return false, nil
+        }
+        user := auth[l+1:]
+        enc := auth[:l+1]
+
+        encdata, _ := base64.StdEncoding.DecodeString(enc)
+        dendata, err := token.RsaDecrypt(encdata)
+        if err != nil {
+                return false, err
+        }
+
+        if string(dendata) == user {
+                return true, nil
+        } else {
+                return false, nil
+        }
+}
+
 func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 	var err error
 
@@ -82,8 +105,15 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 		ctlConn.Close()
 	}
 
+	token := authMsg.User
+	if check, _ = checkToken(token) {
+		failAuth(fmt.Errorf("Error auth_token: %s", token))
+		return
+	}
+
 	// register the clientid
 	c.id = authMsg.ClientId
+
 	if c.id == "" {
 		// it's a new session, assign an ID
 		if c.id, err = util.SecureRandId(16); err != nil {
