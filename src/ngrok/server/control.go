@@ -75,7 +75,6 @@ func checkToken(auth string) (bool, error) {
         if err != nil {
                 return false, err
         }
-
         if string(dendata) == user {
                 return true, nil
         } else {
@@ -106,7 +105,7 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 	}
 
 	token := authMsg.User
-	if check, _ = checkToken(token) {
+	if check, _ := checkToken(token); !check{
 		failAuth(fmt.Errorf("Error auth_token: %s", token))
 		return
 	}
