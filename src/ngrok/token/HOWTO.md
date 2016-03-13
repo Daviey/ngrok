@@ -33,4 +33,5 @@ Edit config
 auth_token: xxxxxx
 ```
 then, you can use the new token and new server!
+
 PS: Once you have generated rsa keys, you don't have to generate them again, just generate auth_token with new user name
