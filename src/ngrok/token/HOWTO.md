@@ -12,6 +12,7 @@ PS: the key length determine the user name length,
 ```
 openssl rsa -in private.pem -pubout -out public.pem
 ```
+PS: in this case, you shouldn't make the public key opened to others.
 
 ## Update server key
 Edit **rsa.go**, update the private key and pubic key, then **rebuild server**
