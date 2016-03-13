@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 )
@@ -37,7 +36,7 @@ func init() {
 
 	pubblock, _ := pem.Decode(publicKey)
         pubInterface, _ := x509.ParsePKIXPublicKey(pubblock.Bytes)
-        pub = pubInterface.(*rsa.PublicKey)	
+        pub = pubInterface.(*rsa.PublicKey)
 }
 func RsaEncrypt(data []byte) ([]byte, error) {
 	return rsa.EncryptPKCS1v15(rand.Reader, pub, data)
