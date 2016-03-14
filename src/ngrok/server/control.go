@@ -64,18 +64,18 @@ type Control struct {
 }
 
 func checkToken(auth string) bool {
-        sharp := strings.IndexAny(auth, "#")
-        if sharp == -1 {
-                return false
-        }
-        user := auth[:sharp]
-        signature := auth[sharp+1:]
+	sharp := strings.IndexAny(auth, "#")
+	if sharp == -1 {
+		return false
+	}
+	user := auth[:sharp]
+	signature := auth[sharp+1:]
 
-        encdata, _ := base64.StdEncoding.DecodeString(signature)
-        err := token.RsaVerify([]byte(user), encdata, crypto.MD5)
-        if err != nil {
-                return false
-        }
+	encdata, _ := base64.StdEncoding.DecodeString(signature)
+	err := token.RsaVerify([]byte(user), encdata, crypto.MD5)
+	if err != nil {
+		return false
+	}
 	return true
 }
 
@@ -102,7 +102,7 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 	}
 
 	token := authMsg.User
-	if !checkToken(token){
+	if !checkToken(token) {
 		failAuth(fmt.Errorf("Error auth_token: %s", token))
 		return
 	}

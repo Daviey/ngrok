@@ -16,6 +16,9 @@ fmt:
 client: deps
 	go install -tags '$(BUILDTAGS)' ngrok/main/ngrok
 
+token-gen: deps
+	go install -tags '$(BUILDTAGS)' ngrok/main/ngrokg
+
 assets: client-assets server-assets
 
 bin/go-bindata:
@@ -38,6 +41,9 @@ release-client: client
 
 release-server: BUILDTAGS=release
 release-server: server
+
+release-token-gen: BUILDTAGS=release
+release-token-gen: server
 
 release-all: fmt release-client release-server
 

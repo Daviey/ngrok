@@ -1,4 +1,4 @@
-package token 
+package token
 
 import (
 	"crypto"
@@ -6,7 +6,6 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
-	"fmt"
 )
 
 var privateKey = []byte(`
@@ -28,15 +27,16 @@ MEwwDQYJKoZIhvcNAQEBBQADOwAwOAIxANj+86TOi3TxS1/nQiKhahP03qyYleWK
 `)
 
 var priv *rsa.PrivateKey
-var pub  *rsa.PublicKey
+var pub *rsa.PublicKey
+
 func init() {
 	// TBD handle error
-        privblock, _ := pem.Decode(privateKey)
-        priv, _ = x509.ParsePKCS1PrivateKey(privblock.Bytes)
+	privblock, _ := pem.Decode(privateKey)
+	priv, _ = x509.ParsePKCS1PrivateKey(privblock.Bytes)
 
 	pubblock, _ := pem.Decode(publicKey)
-        pubInterface, _ := x509.ParsePKIXPublicKey(pubblock.Bytes)
-        pub = pubInterface.(*rsa.PublicKey)
+	pubInterface, _ := x509.ParsePKIXPublicKey(pubblock.Bytes)
+	pub = pubInterface.(*rsa.PublicKey)
 }
 func RsaEncrypt(data []byte) ([]byte, error) {
 	return rsa.EncryptPKCS1v15(rand.Reader, pub, data)
@@ -59,4 +59,3 @@ func RsaVerify(data []byte, sign []byte, hash crypto.Hash) error {
 	hashed := h.Sum(nil)
 	return rsa.VerifyPKCS1v15(pub, hash, hashed, sign)
 }
-

@@ -3,27 +3,32 @@
 ## Generate RSA key
 ### Generate private key
 ```
-openssl genrsa -out private.pem 256
+openssl genrsa -out private.pem 384
 ```
-PS: the key length determine the user name length,
-```key length - 11 = user name length```(in bytes)
 
 ### Generate public key
 ```
 openssl rsa -in private.pem -pubout -out public.pem
 ```
-PS: in this case, you shouldn't make the public key opened to others.
 
 ## Update server key
 Edit **rsa.go**, update the private key and pubic key, then **rebuild server**
 
-## Update generator
-Edit gentoken.go, update the private key and pubic key
+
+## Compile ngrokg binary
+In top ngrok directory, run
+```
+make token-gen
+```
+or
+```
+make release-token-gen
+```
 
 ## Generate auth_token
 Run
 ```
-go run gentoken.go -u new_user_name
+bin/ngrokg -u new_user_name
 ```
 You will receive a new auth_token, like ```auth_token: xxxxxx```
 
