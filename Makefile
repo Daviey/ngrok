@@ -43,9 +43,9 @@ release-server: BUILDTAGS=release
 release-server: server
 
 release-token-gen: BUILDTAGS=release
-release-token-gen: server
+release-token-gen: token-gen
 
-release-all: fmt release-client release-server
+release-all: fmt release-client release-server release-token-gen
 
 all: fmt client server
 
