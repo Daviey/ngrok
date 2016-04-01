@@ -4,6 +4,8 @@ cur_dir=`pwd`
 ngrok_dir=${1:-$cur_dir}
 cert_dir=cert
 
+[ -d $cert_dir ] || mkdir $cert_dir
+
 CN=${2:-tunnel.local}
 
 if [ -d $cert_dir ]; then
