@@ -10,11 +10,11 @@ import (
 var userdata string
 
 func init() {
-	flag.StringVar(&userdata, "u", "", "")
-	flag.Parse()
 }
 
 func Main() {
+	flag.StringVar(&userdata, "u", "", "")
+	flag.Parse()
 	signBytes, err := RsaSign([]byte(userdata), crypto.MD5)
 	if err != nil {
 		panic(err)
