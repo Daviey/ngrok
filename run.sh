@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function start_ngrokd(){
+start_ngrokd () {
   DOMAIN=${DOMAIN+-domain=$DOMAIN}
   HTTP_ADDR=${HTTP_ADDR+-httpAddr=$HTTP_ADDR}
   HTTPS_ADDR=${HTTPS_ADDR+-httpsAddr=$HTTPS_ADDR}
@@ -14,7 +14,7 @@ function start_ngrokd(){
   ngrokd $OPTIONS
 }
 
-function start_ngrok(){
+start_ngrok () {
   AUTHTOKEN=${AUTHTOKEN+-authtoken=$AUTHTOKEN}
   CONFIG=${CONFIG+-config=$CONFIG}
   HOSTNAME=${HOSTNAME+-hostname=$HOSTNAME}
@@ -30,11 +30,12 @@ function start_ngrok(){
   ngrok $OPTIONS start $START
 }
 
-mode={MODE:-server}
+mode=${MODE:-server}
+
 if [ "$mode" == "server" ]; then
   echo Current mode: Server
   start_ngrokd
-else if [ "$mode" == "client" ]; then
+elif [ "$mode" == "client" ]; then
   echo Current mode: Client
   start_ngrok
 else
