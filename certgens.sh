@@ -15,12 +15,17 @@ fi
 echo ngrok directory: $ngrok_dir
 echo CN: $CN
 
-openssl genrsa -out ${ngrok_dir}/${cert_dir}/rootCA.key 2048
-openssl req -x509 -new -nodes \
+if [ -e ${ngrok_dir}/${cert_dir}/rootCA.key ]; then
+  echo RootCA exists
+else
+  openssl genrsa -out ${ngrok_dir}/${cert_dir}/rootCA.key 2048
+  openssl req -x509 -new -nodes \
     -key ${ngrok_dir}/${cert_dir}/rootCA.key \
     -subj "/CN=${CN}" \
     -out ${ngrok_dir}/${cert_dir}/rootCA.pem \
     -days 2048
+fi
+
 openssl genrsa -out ${ngrok_dir}/${cert_dir}/device.key 2048
 openssl req -new -key ${ngrok_dir}/${cert_dir}/device.key \
     -subj "/CN=${CN}" \
