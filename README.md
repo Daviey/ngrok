@@ -5,6 +5,13 @@ status](https://travis-ci.org/inconshreveable/ngrok.svg)](https://travis-ci.org/
 ### ”I want to expose a local server behind a NAT or firewall to the internet.”
 ![](https://ngrok.com/static/img/overview.png)
 
+## About token
+The official version have some api about token configuration.
+
+I have added some code for token api. Now it works!
+
+Here is doc: [How to use token](https://github.com/jim3mar/ngrok/blob/authtoken/src/ngrok/token/HOWTO.md)
+
 ## What is ngrok?
 ngrok is a reverse proxy that creates a secure tunnel from a public endpoint to a locally running web service.
 ngrok captures and analyzes all traffic over the tunnel for later inspection and replay.

@@ -1,5 +1,6 @@
 .PHONY: default server client deps fmt clean all release-all assets client-assets server-assets contributors
 export GOPATH:=$(shell pwd)
+export CGO_ENABLED:=0
 
 BUILDTAGS=debug
 default: all
@@ -15,6 +16,9 @@ fmt:
 
 client: deps
 	go install -tags '$(BUILDTAGS)' ngrok/main/ngrok
+
+token-gen: deps
+	go install -tags '$(BUILDTAGS)' ngrok/main/ngrokg
 
 assets: client-assets server-assets
 
@@ -39,7 +43,10 @@ release-client: client
 release-server: BUILDTAGS=release
 release-server: server
 
-release-all: fmt release-client release-server
+release-token-gen: BUILDTAGS=release
+release-token-gen: token-gen
+
+release-all: fmt release-client release-server release-token-gen
 
 all: fmt client server
 
