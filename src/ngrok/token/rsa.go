@@ -6,31 +6,35 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"fmt"
+	"io/ioutil"
+	"os"
 )
-
-var privateKey = []byte(`
------BEGIN RSA PRIVATE KEY-----
-MIHyAgEAAjEA2P7zpM6LdPFLX+dCIqFqE/TerJiV5YrUdxEJs5wC/Caaz56wdhXc
-kAmPylh2ouqXAgMBAAECMQC2ATnonNk5r/2xpe3B0DOCI5v1llH74vGAbvRKlhZa
-Ut1FV3ly27kxgbxRq6w4vmkCGQD1TLyN1yrjKQh4aCI/MsvyYo50z5yYBwUCGQDi
-diVgn93RwhGhJsq/K0A01XFSvYUp5esCGAizyTiq+n2GliNXZmehkLSvpGgmeWK3
-VQIYHk7Xk8XxhvglKd8qNUmRj0CdqQgqQUA/Ahgf9xvUrF4hBWYhAOW16L1yuxWR
-y1STgdU=
------END RSA PRIVATE KEY-----
-`)
-
-var publicKey = []byte(`
------BEGIN PUBLIC KEY-----
-MEwwDQYJKoZIhvcNAQEBBQADOwAwOAIxANj+86TOi3TxS1/nQiKhahP03qyYleWK
-1HcRCbOcAvwmms+esHYV3JAJj8pYdqLqlwIDAQAB
------END PUBLIC KEY-----
-`)
 
 var priv *rsa.PrivateKey
 var pub *rsa.PublicKey
 
+func readKeys() ([]byte, []byte) {
+	privateKey, err := ioutil.ReadFile("assets/token/private.pem")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading private file, does it exist? (./assets/token/private.pem)\n")
+		os.Exit(1)
+	}
+
+	publicKey, err := ioutil.ReadFile("assets/token/public.pem")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading publickey file, does it exist? (./assets/token/public.pem)\n")
+		os.Exit(1)
+	}
+
+	return privateKey, publicKey
+
+}
+
 func init() {
 	// TBD handle error
+	privateKey, publicKey := readKeys()
+
 	privblock, _ := pem.Decode(privateKey)
 	priv, _ = x509.ParsePKCS1PrivateKey(privblock.Bytes)
 
